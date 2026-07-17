@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react'
+import { useState, useEffect, useCallback } from 'react'
 import { supabase } from './supabaseClient'
 import { 
   Mail, 
@@ -143,7 +143,12 @@ function App() {
   const [successMsg, setSuccessMsg] = useState('')
   const [actionLoading, setActionLoading] = useState(false)
 
-  // Initialize Auth & Theme
+  // Sync theme with document attribute
+  useEffect(() => {
+    document.documentElement.setAttribute('data-theme', theme)
+  }, [theme])
+
+  // Initialize Auth
   useEffect(() => {
     supabase.auth.getSession().then(({ data: { session } }) => {
       setSession(session)
@@ -165,8 +170,6 @@ function App() {
       setLoading(false)
     })
 
-    document.documentElement.setAttribute('data-theme', theme)
-
     return () => subscription.unsubscribe()
   }, [])
 
@@ -183,9 +186,9 @@ function App() {
     if (selectedPatientId) {
       loadPatientDetails(selectedPatientId)
     }
-  }, [selectedPatientId])
+  }, [selectedPatientId, loadPatientDetails])
 
-  const loadPatientDetails = async (patientId) => {
+  const loadPatientDetails = useCallback(async (patientId) => {
     setErrorMsg('')
     setSuccessMsg('')
     // Find patient and set edit form states
@@ -252,7 +255,7 @@ function App() {
     } finally {
       setLoadingPlans(false)
     }
-  }
+  }, [patientsList])
 
   const toggleTheme = () => {
     const nextTheme = theme === 'light' ? 'dark' : 'light'
