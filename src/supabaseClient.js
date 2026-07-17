@@ -1,0 +1,14 @@
+import { createClient, SupabaseAuthAdapter } from '@neondatabase/neon-js'
+
+const neonAuthUrl = 'https://ep-fancy-dew-ackm4d31.neonauth.sa-east-1.aws.neon.tech/neondb/auth'
+const neonDataApiUrl = 'https://ep-fancy-dew-ackm4d31.apirest.sa-east-1.aws.neon.tech/neondb/rest/v1'
+
+export const supabase = createClient({
+  auth: {
+    url: neonAuthUrl,
+    adapter: SupabaseAuthAdapter(),
+  },
+  dataApi: {
+    url: neonDataApiUrl,
+  },
+})
