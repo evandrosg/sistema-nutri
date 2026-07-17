@@ -1,13 +1,13 @@
 import { useState, useEffect, useCallback } from 'react'
 import { supabase } from './supabaseClient'
-import { 
-  Mail, 
-  Lock, 
-  User, 
-  Sun, 
-  Moon, 
-  LogOut, 
-  AlertCircle, 
+import {
+  Mail,
+  Lock,
+  User,
+  Sun,
+  Moon,
+  LogOut,
+  AlertCircle,
   CheckCircle,
   Eye,
   EyeOff,
@@ -22,8 +22,8 @@ import {
 const Button = ({ children, variant = 'primary', className = '', ...props }) => {
   const baseClass = variant === 'secondary' ? 'btn-secondary' : 'btn-primary';
   return (
-    <button 
-      className={`${baseClass} ${className}`} 
+    <button
+      className={`${baseClass} ${className}`}
       {...props}
     >
       {children}
@@ -38,7 +38,7 @@ function App() {
   const [view, setView] = useState('login') // 'login' | 'register' | 'app'
   const [activeTab, setActiveTab] = useState('dashboard') // 'dashboard' | 'pacientes'
   const [selectedPatientId, setSelectedPatientId] = useState(null)
-  
+
   // Dashboard Metrics & Data
   const [totalPatients, setTotalPatients] = useState(0)
   const [weekConsultations, setWeekConsultations] = useState(0)
@@ -61,7 +61,7 @@ function App() {
   const [pTelefone, setPTelefone] = useState('')
   const [pWhatsapp, setPWhatsapp] = useState('')
   const [pEmail, setPEmail] = useState('')
-  
+
   const [pPeso, setPPeso] = useState('')
   const [pAltura, setPAltura] = useState('')
   const [pObjetivos, setPObjetivos] = useState([])
@@ -75,7 +75,7 @@ function App() {
   const [pAlergiaLivre, setPAlergiaLivre] = useState('')
   const [pMedicamentos, setPMedicamentos] = useState('')
   const [pSuplementos, setPSuplementos] = useState('')
-  
+
   const [pRefeicoesDia, setPRefeicoesDia] = useState('')
   const [pHorarioAcorda, setPHorarioAcorda] = useState('')
   const [pHorarioDorme, setPHorarioDorme] = useState('')
@@ -90,7 +90,7 @@ function App() {
   const [epTelefone, setEpTelefone] = useState('')
   const [epWhatsapp, setEpWhatsapp] = useState('')
   const [epEmail, setEpEmail] = useState('')
-  
+
   const [epPeso, setEpPeso] = useState('')
   const [epAltura, setEpAltura] = useState('')
   const [epObjetivos, setEpObjetivos] = useState([])
@@ -104,7 +104,7 @@ function App() {
   const [epAlergiaLivre, setEpAlergiaLivre] = useState('')
   const [epMedicamentos, setEpMedicamentos] = useState('')
   const [epSuplementos, setEpSuplementos] = useState('')
-  
+
   const [epRefeicoesDia, setEpRefeicoesDia] = useState('')
   const [epHorarioAcorda, setEpHorarioAcorda] = useState('')
   const [epHorarioDorme, setEpHorarioDorme] = useState('')
@@ -117,7 +117,7 @@ function App() {
   const [consultationsList, setConsultationsList] = useState([])
   const [loadingConsultations, setLoadingConsultations] = useState(false)
   const [showConsultationModal, setShowConsultationModal] = useState(false)
-  
+
   const [plansList, setPlansList] = useState([])
   const [loadingPlans, setLoadingPlans] = useState(false)
   const [selectedPlan, setSelectedPlan] = useState(null)
@@ -137,7 +137,7 @@ function App() {
   const [nome, setNome] = useState('')
   const [confirmPassword, setConfirmPassword] = useState('')
   const [showPassword, setShowPassword] = useState(false)
-  
+
   // Feedback states
   const [errorMsg, setErrorMsg] = useState('')
   const [successMsg, setSuccessMsg] = useState('')
@@ -181,13 +181,6 @@ function App() {
     }
   }, [view, session])
 
-  // Load consultations and food plans when a patient profile is selected
-  useEffect(() => {
-    if (selectedPatientId) {
-      loadPatientDetails(selectedPatientId)
-    }
-  }, [selectedPatientId, loadPatientDetails])
-
   const loadPatientDetails = useCallback(async (patientId) => {
     setErrorMsg('')
     setSuccessMsg('')
@@ -200,7 +193,7 @@ function App() {
       setEpTelefone(patient.telefone || '')
       setEpWhatsapp(patient.whatsapp || '')
       setEpEmail(patient.email || '')
-      
+
       setEpPeso(patient.peso_inicial || '')
       setEpAltura(patient.altura || '')
       setEpObjetivos(patient.objetivos || [])
@@ -214,7 +207,7 @@ function App() {
       setEpAlergiaLivre('')
       setEpMedicamentos(patient.medicamentos || '')
       setEpSuplementos(patient.suplementos || '')
-      
+
       setEpRefeicoesDia(patient.refeicoes_por_dia || '')
       setEpHorarioAcorda(patient.horario_acorda || '')
       setEpHorarioDorme(patient.horario_dorme || '')
@@ -257,6 +250,13 @@ function App() {
     }
   }, [patientsList])
 
+  // Load consultations and food plans when a patient profile is selected
+  useEffect(() => {
+    if (selectedPatientId) {
+      loadPatientDetails(selectedPatientId)
+    }
+  }, [selectedPatientId, loadPatientDetails])
+
   const toggleTheme = () => {
     const nextTheme = theme === 'light' ? 'dark' : 'light'
     setTheme(nextTheme)
@@ -281,7 +281,7 @@ function App() {
       const { count: countPatients, error: errorPatients } = await supabase
         .from('pacientes')
         .select('*', { count: 'exact', head: true })
-      
+
       if (errorPatients) throw errorPatients
       setTotalPatients(countPatients || 0)
 
@@ -290,12 +290,12 @@ function App() {
       const day = now.getDay()
       const diff = now.getDate() - day + (day === 0 ? -6 : 1) // Adjust if Sunday
       const startOfWeek = new Date(now.setDate(diff))
-      startOfWeek.setHours(0,0,0,0)
-      
+      startOfWeek.setHours(0, 0, 0, 0)
+
       const endOfWeek = new Date(startOfWeek)
       endOfWeek.setDate(startOfWeek.getDate() + 6)
-      endOfWeek.setHours(23,59,59,999)
-      
+      endOfWeek.setHours(23, 59, 59, 999)
+
       const startStr = startOfWeek.toISOString().split('T')[0]
       const endStr = endOfWeek.toISOString().split('T')[0]
 
@@ -321,10 +321,10 @@ function App() {
       if (cError) throw cError
 
       const today = new Date()
-      today.setHours(0,0,0,0)
+      today.setHours(0, 0, 0, 0)
       const thirtyDaysAgo = new Date()
       thirtyDaysAgo.setDate(thirtyDaysAgo.getDate() - 30)
-      thirtyDaysAgo.setHours(0,0,0,0)
+      thirtyDaysAgo.setHours(0, 0, 0, 0)
 
       const noReturnList = []
 
@@ -333,7 +333,7 @@ function App() {
         if (pConsults.length > 0) {
           const latestConsult = pConsults[0] // since sorted desc
           const lastDate = new Date(latestConsult.data_consulta)
-          
+
           if (lastDate < thirtyDaysAgo) {
             const hasFutureReturn = pConsults.some(c => {
               if (!c.proximo_retorno) return false
@@ -372,7 +372,7 @@ function App() {
         .from('pacientes')
         .select('*')
         .order('nome', { ascending: true })
-      
+
       if (errorPatients) throw errorPatients
       setPatientsList(patients || [])
 
@@ -381,7 +381,7 @@ function App() {
         .from('consultas')
         .select('paciente_id, data_consulta')
         .order('data_consulta', { ascending: false })
-      
+
       if (!errorConsultations && consultations) {
         const mapping = {}
         consultations.forEach(c => {
@@ -610,9 +610,9 @@ function App() {
 
     return (
       <div style={{ animation: 'slideIn 0.3s ease-out' }}>
-        <Button 
-          onClick={() => setSelectedPatientId(null)} 
-          variant="secondary" 
+        <Button
+          onClick={() => setSelectedPatientId(null)}
+          variant="secondary"
           style={{ marginBottom: '1.5rem', display: 'flex', alignItems: 'center', gap: '0.5rem' }}
         >
           <ArrowLeft size={16} />
@@ -666,28 +666,28 @@ function App() {
               <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '1.5rem' }}>
                 <div className="form-group" style={{ gridColumn: 'span 2' }}>
                   <label className="form-label">Nome Completo *</label>
-                  <input 
-                    type="text" 
-                    className="form-input" 
-                    value={epNome} 
-                    onChange={(e) => setEpNome(e.target.value)} 
-                    required 
+                  <input
+                    type="text"
+                    className="form-input"
+                    value={epNome}
+                    onChange={(e) => setEpNome(e.target.value)}
+                    required
                   />
                 </div>
                 <div className="form-group">
                   <label className="form-label">Data de Nascimento</label>
-                  <input 
-                    type="date" 
-                    className="form-input" 
-                    value={epNascimento} 
-                    onChange={(e) => setEpNascimento(e.target.value)} 
+                  <input
+                    type="date"
+                    className="form-input"
+                    value={epNascimento}
+                    onChange={(e) => setEpNascimento(e.target.value)}
                   />
                 </div>
                 <div className="form-group">
                   <label className="form-label">Sexo</label>
-                  <select 
-                    className="form-input" 
-                    value={epSexo} 
+                  <select
+                    className="form-input"
+                    value={epSexo}
                     onChange={(e) => setEpSexo(e.target.value)}
                   >
                     <option value="Feminino">Feminino</option>
@@ -696,32 +696,32 @@ function App() {
                 </div>
                 <div className="form-group">
                   <label className="form-label">Telefone</label>
-                  <input 
-                    type="text" 
-                    className="form-input" 
-                    placeholder="(00) 0000-0000" 
-                    value={epTelefone} 
-                    onChange={(e) => setEpTelefone(e.target.value)} 
+                  <input
+                    type="text"
+                    className="form-input"
+                    placeholder="(00) 0000-0000"
+                    value={epTelefone}
+                    onChange={(e) => setEpTelefone(e.target.value)}
                   />
                 </div>
                 <div className="form-group">
                   <label className="form-label">WhatsApp</label>
-                  <input 
-                    type="text" 
-                    className="form-input" 
-                    placeholder="(00) 90000-0000" 
-                    value={epWhatsapp} 
-                    onChange={(e) => setEpWhatsapp(e.target.value)} 
+                  <input
+                    type="text"
+                    className="form-input"
+                    placeholder="(00) 90000-0000"
+                    value={epWhatsapp}
+                    onChange={(e) => setEpWhatsapp(e.target.value)}
                   />
                 </div>
                 <div className="form-group" style={{ gridColumn: 'span 2' }}>
                   <label className="form-label">E-mail</label>
-                  <input 
-                    type="email" 
-                    className="form-input" 
-                    placeholder="email@exemplo.com" 
-                    value={epEmail} 
-                    onChange={(e) => setEpEmail(e.target.value)} 
+                  <input
+                    type="email"
+                    className="form-input"
+                    placeholder="email@exemplo.com"
+                    value={epEmail}
+                    onChange={(e) => setEpEmail(e.target.value)}
                   />
                 </div>
               </div>
@@ -732,30 +732,30 @@ function App() {
               <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '1.5rem' }}>
                 <div className="form-group">
                   <label className="form-label">Peso Inicial (kg)</label>
-                  <input 
-                    type="number" 
-                    step="0.1" 
-                    className="form-input" 
-                    placeholder="Ex: 75.5" 
-                    value={epPeso} 
-                    onChange={(e) => setEpPeso(e.target.value)} 
+                  <input
+                    type="number"
+                    step="0.1"
+                    className="form-input"
+                    placeholder="Ex: 75.5"
+                    value={epPeso}
+                    onChange={(e) => setEpPeso(e.target.value)}
                   />
                 </div>
                 <div className="form-group">
                   <label className="form-label">Altura (cm)</label>
-                  <input 
-                    type="number" 
-                    className="form-input" 
-                    placeholder="Ex: 175" 
-                    value={epAltura} 
-                    onChange={(e) => setEpAltura(e.target.value)} 
+                  <input
+                    type="number"
+                    className="form-input"
+                    placeholder="Ex: 175"
+                    value={epAltura}
+                    onChange={(e) => setEpAltura(e.target.value)}
                   />
                 </div>
                 <div className="form-group" style={{ gridColumn: 'span 2' }}>
                   <label className="form-label">Nível de Atividade Física</label>
-                  <select 
-                    className="form-input" 
-                    value={epNivelAtividade} 
+                  <select
+                    className="form-input"
+                    value={epNivelAtividade}
                     onChange={(e) => setEpNivelAtividade(e.target.value)}
                   >
                     <option value="Sedentário">Sedentário (pouco ou nenhum exercício)</option>
@@ -779,13 +779,13 @@ function App() {
                       </button>
                     ))}
                   </div>
-                  <input 
-                    type="text" 
-                    style={{ marginTop: '0.75rem' }} 
-                    className="form-input" 
-                    placeholder="Outro objetivo específico..." 
-                    value={epObjetivoTexto} 
-                    onChange={(e) => setEpObjetivoTexto(e.target.value)} 
+                  <input
+                    type="text"
+                    style={{ marginTop: '0.75rem' }}
+                    className="form-input"
+                    placeholder="Outro objetivo específico..."
+                    value={epObjetivoTexto}
+                    onChange={(e) => setEpObjetivoTexto(e.target.value)}
                   />
                 </div>
 
@@ -805,16 +805,16 @@ function App() {
                     ))}
                   </div>
                   <div style={{ display: 'flex', gap: '0.5rem', marginTop: '0.75rem' }}>
-                    <input 
-                      type="text" 
-                      className="form-input" 
-                      placeholder="Outra patologia..." 
-                      value={epPatologiaLivre} 
-                      onChange={(e) => setEpPatologiaLivre(e.target.value)} 
+                    <input
+                      type="text"
+                      className="form-input"
+                      placeholder="Outra patologia..."
+                      value={epPatologiaLivre}
+                      onChange={(e) => setEpPatologiaLivre(e.target.value)}
                     />
-                    <button 
-                      type="button" 
-                      className="btn-secondary" 
+                    <button
+                      type="button"
+                      className="btn-secondary"
                       onClick={() => handleAddLivre(epPatologiaLivre, epPatologias, setEpPatologias, setEpPatologiaLivre)}
                     >
                       +
@@ -838,16 +838,16 @@ function App() {
                     ))}
                   </div>
                   <div style={{ display: 'flex', gap: '0.5rem', marginTop: '0.75rem' }}>
-                    <input 
-                      type="text" 
-                      className="form-input" 
-                      placeholder="Outra restrição..." 
-                      value={epRestricaoLivre} 
-                      onChange={(e) => setEpRestricaoLivre(e.target.value)} 
+                    <input
+                      type="text"
+                      className="form-input"
+                      placeholder="Outra restrição..."
+                      value={epRestricaoLivre}
+                      onChange={(e) => setEpRestricaoLivre(e.target.value)}
                     />
-                    <button 
-                      type="button" 
-                      className="btn-secondary" 
+                    <button
+                      type="button"
+                      className="btn-secondary"
                       onClick={() => handleAddLivre(epRestricaoLivre, epRestricoes, setEpRestricoes, setEpRestricaoLivre)}
                     >
                       +
@@ -871,16 +871,16 @@ function App() {
                     ))}
                   </div>
                   <div style={{ display: 'flex', gap: '0.5rem', marginTop: '0.75rem' }}>
-                    <input 
-                      type="text" 
-                      className="form-input" 
-                      placeholder="Outra alergia..." 
-                      value={epAlergiaLivre} 
-                      onChange={(e) => setEpAlergiaLivre(e.target.value)} 
+                    <input
+                      type="text"
+                      className="form-input"
+                      placeholder="Outra alergia..."
+                      value={epAlergiaLivre}
+                      onChange={(e) => setEpAlergiaLivre(e.target.value)}
                     />
-                    <button 
-                      type="button" 
-                      className="btn-secondary" 
+                    <button
+                      type="button"
+                      className="btn-secondary"
                       onClick={() => handleAddLivre(epAlergiaLivre, epAlergias, setEpAlergias, setEpAlergiaLivre)}
                     >
                       +
@@ -890,22 +890,22 @@ function App() {
 
                 <div className="form-group" style={{ gridColumn: 'span 2' }}>
                   <label className="form-label">Medicamentos Contínuos</label>
-                  <textarea 
-                    className="form-input" 
-                    placeholder="Medicamentos de uso contínuo" 
-                    value={epMedicamentos} 
-                    onChange={(e) => setEpMedicamentos(e.target.value)} 
-                    rows={2} 
+                  <textarea
+                    className="form-input"
+                    placeholder="Medicamentos de uso contínuo"
+                    value={epMedicamentos}
+                    onChange={(e) => setEpMedicamentos(e.target.value)}
+                    rows={2}
                   />
                 </div>
                 <div className="form-group" style={{ gridColumn: 'span 2' }}>
                   <label className="form-label">Suplementos em Uso</label>
-                  <textarea 
-                    className="form-input" 
-                    placeholder="Suplementos ou vitaminas em uso" 
-                    value={epSuplementos} 
-                    onChange={(e) => setEpSuplementos(e.target.value)} 
-                    rows={2} 
+                  <textarea
+                    className="form-input"
+                    placeholder="Suplementos ou vitaminas em uso"
+                    value={epSuplementos}
+                    onChange={(e) => setEpSuplementos(e.target.value)}
+                    rows={2}
                   />
                 </div>
               </div>
@@ -917,31 +917,31 @@ function App() {
                 <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr 1fr', gap: '1rem' }}>
                   <div className="form-group">
                     <label className="form-label">Refeições/dia</label>
-                    <input 
-                      type="number" 
-                      className="form-input" 
-                      value={epRefeicoesDia} 
-                      onChange={(e) => setEpRefeicoesDia(e.target.value)} 
+                    <input
+                      type="number"
+                      className="form-input"
+                      value={epRefeicoesDia}
+                      onChange={(e) => setEpRefeicoesDia(e.target.value)}
                     />
                   </div>
                   <div className="form-group">
                     <label className="form-label">Horário Acorda</label>
-                    <input 
-                      type="text" 
-                      className="form-input" 
-                      placeholder="Ex: 07:00" 
-                      value={epHorarioAcorda} 
+                    <input
+                      type="text"
+                      className="form-input"
+                      placeholder="Ex: 07:00"
+                      value={epHorarioAcorda}
                       onChange={(e) => setEpHorarioAcorda(e.target.value)}
                       onBlur={(e) => handleTimeBlur(e.target.value, setEpHorarioAcorda)}
                     />
                   </div>
                   <div className="form-group">
                     <label className="form-label">Horário Dorme</label>
-                    <input 
-                      type="text" 
-                      className="form-input" 
-                      placeholder="Ex: 23:00" 
-                      value={epHorarioDorme} 
+                    <input
+                      type="text"
+                      className="form-input"
+                      placeholder="Ex: 23:00"
+                      value={epHorarioDorme}
                       onChange={(e) => setEpHorarioDorme(e.target.value)}
                       onBlur={(e) => handleTimeBlur(e.target.value, setEpHorarioDorme)}
                     />
@@ -950,35 +950,35 @@ function App() {
 
                 <div className="form-group">
                   <label className="form-label">Consumo de Água (litros/dia)</label>
-                  <input 
-                    type="number" 
-                    step="0.1" 
-                    className="form-input" 
-                    placeholder="Ex: 2.5" 
-                    value={epLitrosAgua} 
-                    onChange={(e) => setEpLitrosAgua(e.target.value)} 
+                  <input
+                    type="number"
+                    step="0.1"
+                    className="form-input"
+                    placeholder="Ex: 2.5"
+                    value={epLitrosAgua}
+                    onChange={(e) => setEpLitrosAgua(e.target.value)}
                   />
                 </div>
 
                 <div className="form-group">
                   <label className="form-label" style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', cursor: 'pointer' }}>
-                    <input 
-                      type="checkbox" 
-                      checked={epAtividadeFisica} 
-                      onChange={() => setEpAtividadeFisica(!epAtividadeFisica)} 
+                    <input
+                      type="checkbox"
+                      checked={epAtividadeFisica}
+                      onChange={() => setEpAtividadeFisica(!epAtividadeFisica)}
                     />
                     Pratica atividade física?
                   </label>
-                  
+
                   {epAtividadeFisica && (
                     <div style={{ marginTop: '0.75rem', animation: 'slideIn 0.2s ease-out' }}>
                       <label className="form-label">Descrição e Frequência</label>
-                      <textarea 
-                        className="form-input" 
-                        placeholder="Qual atividade e frequência semanal? Ex: Corrida 3x/semana" 
-                        value={epAtividadeFisicaDesc} 
-                        onChange={(e) => setEpAtividadeFisicaDesc(e.target.value)} 
-                        rows={2} 
+                      <textarea
+                        className="form-input"
+                        placeholder="Qual atividade e frequência semanal? Ex: Corrida 3x/semana"
+                        value={epAtividadeFisicaDesc}
+                        onChange={(e) => setEpAtividadeFisicaDesc(e.target.value)}
+                        rows={2}
                       />
                     </div>
                   )}
@@ -986,12 +986,12 @@ function App() {
 
                 <div className="form-group">
                   <label className="form-label">Observações Gerais</label>
-                  <textarea 
-                    className="form-input" 
-                    placeholder="Observações complementares" 
-                    value={epObservacoes} 
-                    onChange={(e) => setEpObservacoes(e.target.value)} 
-                    rows={3} 
+                  <textarea
+                    className="form-input"
+                    placeholder="Observações complementares"
+                    value={epObservacoes}
+                    onChange={(e) => setEpObservacoes(e.target.value)}
+                    rows={3}
                   />
                 </div>
               </div>
@@ -1140,91 +1140,91 @@ function App() {
                 <div style={{ display: 'flex', flexDirection: 'column', gap: '1rem' }}>
                   <div className="form-group">
                     <label className="form-label">Data da Consulta *</label>
-                    <input 
-                      type="date" 
-                      className="form-input" 
-                      required 
-                      value={cData} 
-                      onChange={(e) => setCData(e.target.value)} 
+                    <input
+                      type="date"
+                      className="form-input"
+                      required
+                      value={cData}
+                      onChange={(e) => setCData(e.target.value)}
                     />
                   </div>
                   <div className="form-group">
                     <label className="form-label">Peso Atual (kg) *</label>
-                    <input 
-                      type="number" 
-                      step="0.1" 
-                      className="form-input" 
-                      required 
+                    <input
+                      type="number"
+                      step="0.1"
+                      className="form-input"
+                      required
                       placeholder="Ex: 78.4"
-                      value={cPeso} 
-                      onChange={(e) => setCPeso(e.target.value)} 
+                      value={cPeso}
+                      onChange={(e) => setCPeso(e.target.value)}
                     />
                   </div>
                   <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr 1fr', gap: '0.75rem' }}>
                     <div className="form-group">
                       <label className="form-label">Cintura (cm)</label>
-                      <input 
-                        type="number" 
-                        step="0.1" 
-                        className="form-input" 
+                      <input
+                        type="number"
+                        step="0.1"
+                        className="form-input"
                         placeholder="Ex: 85"
-                        value={cCintura} 
-                        onChange={(e) => setCCintura(e.target.value)} 
+                        value={cCintura}
+                        onChange={(e) => setCCintura(e.target.value)}
                       />
                     </div>
                     <div className="form-group">
                       <label className="form-label">Quadril (cm)</label>
-                      <input 
-                        type="number" 
-                        step="0.1" 
-                        className="form-input" 
+                      <input
+                        type="number"
+                        step="0.1"
+                        className="form-input"
                         placeholder="Ex: 98"
-                        value={cQuadril} 
-                        onChange={(e) => setCQuadril(e.target.value)} 
+                        value={cQuadril}
+                        onChange={(e) => setCQuadril(e.target.value)}
                       />
                     </div>
                     <div className="form-group">
                       <label className="form-label">% Gordura</label>
-                      <input 
-                        type="number" 
-                        step="0.1" 
-                        className="form-input" 
+                      <input
+                        type="number"
+                        step="0.1"
+                        className="form-input"
                         placeholder="Ex: 18.5"
-                        value={cGordura} 
-                        onChange={(e) => setCGordura(e.target.value)} 
+                        value={cGordura}
+                        onChange={(e) => setCGordura(e.target.value)}
                       />
                     </div>
                   </div>
                   <div className="form-group">
                     <label className="form-label">Observações</label>
-                    <textarea 
-                      className="form-input" 
+                    <textarea
+                      className="form-input"
                       placeholder="Evolução, dificuldades, queixas, etc..."
-                      rows={3} 
-                      value={cObservacoes} 
-                      onChange={(e) => setCObservacoes(e.target.value)} 
+                      rows={3}
+                      value={cObservacoes}
+                      onChange={(e) => setCObservacoes(e.target.value)}
                     />
                   </div>
                   <div className="form-group">
                     <label className="form-label">Próxima Consulta (Retorno)</label>
-                    <input 
-                      type="date" 
-                      className="form-input" 
-                      value={cProximoRetorno} 
-                      onChange={(e) => setCProximoRetorno(e.target.value)} 
+                    <input
+                      type="date"
+                      className="form-input"
+                      value={cProximoRetorno}
+                      onChange={(e) => setCProximoRetorno(e.target.value)}
                     />
                   </div>
                 </div>
                 <div style={{ display: 'flex', justifyContent: 'flex-end', gap: '1rem', marginTop: '2rem', borderTop: '1px solid var(--border-color)', paddingTop: '1.25rem' }}>
-                  <Button 
-                    type="button" 
-                    variant="secondary" 
+                  <Button
+                    type="button"
+                    variant="secondary"
                     onClick={() => setShowConsultationModal(false)}
                   >
                     Cancelar
                   </Button>
-                  <Button 
-                    type="submit" 
+                  <Button
+                    type="submit"
                     disabled={actionLoading}
                   >
                     {actionLoading ? 'Salvando...' : 'Salvar Consulta'}
@@ -1273,7 +1273,7 @@ function App() {
     }
     if (isNaN(hours) || hours < 0 || hours > 23) hours = 0
     if (isNaN(minutes) || minutes < 0 || minutes > 59) minutes = 0
-    
+
     const hStr = hours.toString().padStart(2, '0')
     const mStr = minutes.toString().padStart(2, '0')
     setter(`${hStr}:${mStr}`)
@@ -1411,7 +1411,7 @@ function App() {
       if (data && data[0]) {
         setSuccessMsg('Consulta registrada com sucesso!')
         setShowConsultationModal(false)
-        
+
         // Reset form fields
         setCData(new Date().toISOString().split('T')[0])
         setCPeso('')
@@ -1420,7 +1420,7 @@ function App() {
         setCGordura('')
         setCObservacoes('')
         setCProximoRetorno('')
-        
+
         // Refresh patient details (loads updated consultations list and triggers chart redraw)
         await loadPatientDetails(selectedPatientId)
       }
@@ -1501,8 +1501,8 @@ function App() {
             <h1 style={{ fontSize: '2rem', fontWeight: 700, color: 'var(--text-primary)' }}>Novo Paciente</h1>
             <p style={{ color: 'var(--text-secondary)' }}>Preencha a ficha cadastral do novo paciente</p>
           </div>
-          <button 
-            onClick={() => { setIsAddingPatient(false); setIsEditingPatientId(null); }} 
+          <button
+            onClick={() => { setIsAddingPatient(false); setIsEditingPatientId(null); }}
             className="btn-secondary"
           >
             Cancelar
@@ -1512,9 +1512,9 @@ function App() {
         <form onSubmit={handleSavePatient} style={{ backgroundColor: 'var(--bg-card)', border: '1px solid var(--border-color)', borderRadius: 'var(--radius-md)', padding: '2rem', boxShadow: 'var(--shadow-sm)' }}>
           {/* Tab Navigation */}
           <div style={{ display: 'flex', borderBottom: '1px solid var(--border-color)', marginBottom: '2rem', overflowX: 'auto' }}>
-            <button 
-              type="button" 
-              onClick={() => setActiveFormTab('pessoal')} 
+            <button
+              type="button"
+              onClick={() => setActiveFormTab('pessoal')}
               style={{
                 padding: '0.75rem 1.5rem',
                 background: 'none',
@@ -1528,9 +1528,9 @@ function App() {
             >
               Pessoal
             </button>
-            <button 
-              type="button" 
-              onClick={() => setActiveFormTab('clinico')} 
+            <button
+              type="button"
+              onClick={() => setActiveFormTab('clinico')}
               style={{
                 padding: '0.75rem 1.5rem',
                 background: 'none',
@@ -1544,9 +1544,9 @@ function App() {
             >
               Clínico
             </button>
-            <button 
-              type="button" 
-              onClick={() => setActiveFormTab('habitos')} 
+            <button
+              type="button"
+              onClick={() => setActiveFormTab('habitos')}
               style={{
                 padding: '0.75rem 1.5rem',
                 background: 'none',
@@ -1567,25 +1567,25 @@ function App() {
             <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '1.5rem' }}>
               <div className="form-group" style={{ gridColumn: 'span 2' }}>
                 <label className="form-label" htmlFor="form-nome">Nome Completo *</label>
-                <input 
+                <input
                   id="form-nome"
-                  type="text" 
-                  className="form-input" 
-                  placeholder="Nome completo do paciente" 
-                  value={pNome} 
-                  onChange={(e) => setPNome(e.target.value)} 
-                  required 
+                  type="text"
+                  className="form-input"
+                  placeholder="Nome completo do paciente"
+                  value={pNome}
+                  onChange={(e) => setPNome(e.target.value)}
+                  required
                 />
               </div>
 
               <div className="form-group">
                 <label className="form-label" htmlFor="form-dob">Data de Nascimento</label>
-                <input 
+                <input
                   id="form-dob"
-                  type="date" 
-                  className="form-input" 
-                  value={pNascimento} 
-                  onChange={(e) => setPNascimento(e.target.value)} 
+                  type="date"
+                  className="form-input"
+                  value={pNascimento}
+                  onChange={(e) => setPNascimento(e.target.value)}
                 />
                 {pNascimento && (
                   <span style={{ fontSize: '0.85rem', color: 'var(--primary-color)', marginTop: '0.25rem', display: 'block' }}>
@@ -1596,10 +1596,10 @@ function App() {
 
               <div className="form-group">
                 <label className="form-label" htmlFor="form-sexo">Sexo</label>
-                <select 
+                <select
                   id="form-sexo"
-                  className="form-input" 
-                  value={pSexo} 
+                  className="form-input"
+                  value={pSexo}
                   onChange={(e) => setPSexo(e.target.value)}
                 >
                   <option value="Feminino">Feminino</option>
@@ -1610,37 +1610,37 @@ function App() {
 
               <div className="form-group">
                 <label className="form-label" htmlFor="form-telefone">Telefone</label>
-                <input 
+                <input
                   id="form-telefone"
-                  type="tel" 
-                  className="form-input" 
-                  placeholder="(00) 0000-0000" 
-                  value={pTelefone} 
-                  onChange={(e) => setPTelefone(e.target.value)} 
+                  type="tel"
+                  className="form-input"
+                  placeholder="(00) 0000-0000"
+                  value={pTelefone}
+                  onChange={(e) => setPTelefone(e.target.value)}
                 />
               </div>
 
               <div className="form-group">
                 <label className="form-label" htmlFor="form-whatsapp">WhatsApp</label>
-                <input 
+                <input
                   id="form-whatsapp"
-                  type="tel" 
-                  className="form-input" 
-                  placeholder="(00) 90000-0000" 
-                  value={pWhatsapp} 
-                  onChange={(e) => setPWhatsapp(e.target.value)} 
+                  type="tel"
+                  className="form-input"
+                  placeholder="(00) 90000-0000"
+                  value={pWhatsapp}
+                  onChange={(e) => setPWhatsapp(e.target.value)}
                 />
               </div>
 
               <div className="form-group" style={{ gridColumn: 'span 2' }}>
                 <label className="form-label" htmlFor="form-email">E-mail</label>
-                <input 
+                <input
                   id="form-email"
-                  type="email" 
-                  className="form-input" 
-                  placeholder="exemplo@email.com" 
-                  value={pEmail} 
-                  onChange={(e) => setPEmail(e.target.value)} 
+                  type="email"
+                  className="form-input"
+                  placeholder="exemplo@email.com"
+                  value={pEmail}
+                  onChange={(e) => setPEmail(e.target.value)}
                 />
               </div>
             </div>
@@ -1652,36 +1652,36 @@ function App() {
               <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr 1fr', gap: '1rem' }}>
                 <div className="form-group">
                   <label className="form-label" htmlFor="form-peso">Peso (kg)</label>
-                  <input 
+                  <input
                     id="form-peso"
-                    type="number" 
-                    step="0.1" 
-                    className="form-input" 
-                    placeholder="Ex: 72.5" 
-                    value={pPeso} 
-                    onChange={(e) => setPPeso(e.target.value)} 
+                    type="number"
+                    step="0.1"
+                    className="form-input"
+                    placeholder="Ex: 72.5"
+                    value={pPeso}
+                    onChange={(e) => setPPeso(e.target.value)}
                   />
                 </div>
                 <div className="form-group">
                   <label className="form-label" htmlFor="form-altura">Altura (cm)</label>
-                  <input 
+                  <input
                     id="form-altura"
-                    type="number" 
-                    className="form-input" 
-                    placeholder="Ex: 175" 
-                    value={pAltura} 
-                    onChange={(e) => setPAltura(e.target.value)} 
+                    type="number"
+                    className="form-input"
+                    placeholder="Ex: 175"
+                    value={pAltura}
+                    onChange={(e) => setPAltura(e.target.value)}
                   />
                 </div>
                 <div className="form-group">
                   <label className="form-label" htmlFor="form-imc">IMC</label>
-                  <input 
+                  <input
                     id="form-imc"
-                    type="text" 
-                    className="form-input" 
-                    style={{ backgroundColor: 'var(--bg-primary)', cursor: 'not-allowed' }} 
-                    value={calculateIMC(pPeso, pAltura)} 
-                    readOnly 
+                    type="text"
+                    className="form-input"
+                    style={{ backgroundColor: 'var(--bg-primary)', cursor: 'not-allowed' }}
+                    value={calculateIMC(pPeso, pAltura)}
+                    readOnly
                     placeholder="Calculado automaticamente"
                   />
                 </div>
@@ -1692,32 +1692,32 @@ function App() {
                 <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(200px, 1fr))', gap: '0.5rem', marginBottom: '0.5rem' }}>
                   {['Emagrecer', 'Ganhar massa', 'Controlar diabetes', 'Saúde geral', 'Performance esportiva', 'Reeducação alimentar'].map(obj => (
                     <label key={obj} style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', fontSize: '0.95rem', cursor: 'pointer' }}>
-                      <input 
-                        type="checkbox" 
-                        checked={pObjetivos.includes(obj)} 
-                        onChange={() => handleArrayToggle(obj, pObjetivos, setPObjetivos)} 
+                      <input
+                        type="checkbox"
+                        checked={pObjetivos.includes(obj)}
+                        onChange={() => handleArrayToggle(obj, pObjetivos, setPObjetivos)}
                       />
                       {obj}
                     </label>
                   ))}
                 </div>
                 <label className="form-label" htmlFor="form-obj-txt" style={{ fontSize: '0.85rem', marginTop: '0.5rem' }}>Detalhes do Objetivo</label>
-                <textarea 
+                <textarea
                   id="form-obj-txt"
-                  className="form-input" 
-                  placeholder="Informações adicionais sobre os objetivos" 
-                  value={pObjetivoTexto} 
-                  onChange={(e) => setPObjetivoTexto(e.target.value)} 
-                  rows={2} 
+                  className="form-input"
+                  placeholder="Informações adicionais sobre os objetivos"
+                  value={pObjetivoTexto}
+                  onChange={(e) => setPObjetivoTexto(e.target.value)}
+                  rows={2}
                 />
               </div>
 
               <div className="form-group">
                 <label className="form-label" htmlFor="form-nivel">Nível de Atividade Física</label>
-                <select 
+                <select
                   id="form-nivel"
-                  className="form-input" 
-                  value={pNivelAtividade} 
+                  className="form-input"
+                  value={pNivelAtividade}
                   onChange={(e) => setPNivelAtividade(e.target.value)}
                 >
                   <option value="Sedentário">Sedentário</option>
@@ -1733,26 +1733,26 @@ function App() {
                 <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(200px, 1fr))', gap: '0.5rem', marginBottom: '0.5rem' }}>
                   {['Nenhum', 'Diabetes', 'Hipertensão', 'Hipotireoidismo', 'Hipertireoidismo', 'Síndrome do ovário policístico', 'Doença celíaca', 'Colesterol alto'].map(pat => (
                     <label key={pat} style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', fontSize: '0.95rem', cursor: 'pointer' }}>
-                      <input 
-                        type="checkbox" 
-                        checked={pPatologias.includes(pat)} 
-                        onChange={() => handleArrayToggle(pat, pPatologias, setPPatologias)} 
+                      <input
+                        type="checkbox"
+                        checked={pPatologias.includes(pat)}
+                        onChange={() => handleArrayToggle(pat, pPatologias, setPPatologias)}
                       />
                       {pat}
                     </label>
                   ))}
                 </div>
                 <div style={{ display: 'flex', gap: '0.5rem', marginTop: '0.5rem' }}>
-                  <input 
-                    type="text" 
-                    className="form-input" 
-                    placeholder="Adicionar patologia livremente..." 
-                    value={pPatologiaLivre} 
-                    onChange={(e) => setPPatologiaLivre(e.target.value)} 
+                  <input
+                    type="text"
+                    className="form-input"
+                    placeholder="Adicionar patologia livremente..."
+                    value={pPatologiaLivre}
+                    onChange={(e) => setPPatologiaLivre(e.target.value)}
                   />
-                  <button 
-                    type="button" 
-                    className="btn-secondary" 
+                  <button
+                    type="button"
+                    className="btn-secondary"
                     onClick={() => handleAddLivre(pPatologiaLivre, pPatologias, setPPatologias, setPPatologiaLivre)}
                   >
                     +
@@ -1765,26 +1765,26 @@ function App() {
                 <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(200px, 1fr))', gap: '0.5rem', marginBottom: '0.5rem' }}>
                   {['Nenhum', 'Lactose', 'Glúten', 'Açúcar', 'Carne vermelha', 'Frutos do mar'].map(res => (
                     <label key={res} style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', fontSize: '0.95rem', cursor: 'pointer' }}>
-                      <input 
-                        type="checkbox" 
-                        checked={pRestricoes.includes(res)} 
-                        onChange={() => handleArrayToggle(res, pRestricoes, setPRestricoes)} 
+                      <input
+                        type="checkbox"
+                        checked={pRestricoes.includes(res)}
+                        onChange={() => handleArrayToggle(res, pRestricoes, setPRestricoes)}
                       />
                       {res}
                     </label>
                   ))}
                 </div>
                 <div style={{ display: 'flex', gap: '0.5rem', marginTop: '0.5rem' }}>
-                  <input 
-                    type="text" 
-                    className="form-input" 
-                    placeholder="Adicionar restrição livremente..." 
-                    value={pRestricaoLivre} 
-                    onChange={(e) => setPRestricaoLivre(e.target.value)} 
+                  <input
+                    type="text"
+                    className="form-input"
+                    placeholder="Adicionar restrição livremente..."
+                    value={pRestricaoLivre}
+                    onChange={(e) => setPRestricaoLivre(e.target.value)}
                   />
-                  <button 
-                    type="button" 
-                    className="btn-secondary" 
+                  <button
+                    type="button"
+                    className="btn-secondary"
                     onClick={() => handleAddLivre(pRestricaoLivre, pRestricoes, setPRestricoes, setPRestricaoLivre)}
                   >
                     +
@@ -1797,26 +1797,26 @@ function App() {
                 <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(200px, 1fr))', gap: '0.5rem', marginBottom: '0.5rem' }}>
                   {['Nenhum', 'Amendoim', 'Leite', 'Ovo', 'Soja', 'Trigo', 'Frutos do mar'].map(ale => (
                     <label key={ale} style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', fontSize: '0.95rem', cursor: 'pointer' }}>
-                      <input 
-                        type="checkbox" 
-                        checked={pAlergias.includes(ale)} 
-                        onChange={() => handleArrayToggle(ale, pAlergias, setPAlergias)} 
+                      <input
+                        type="checkbox"
+                        checked={pAlergias.includes(ale)}
+                        onChange={() => handleArrayToggle(ale, pAlergias, setPAlergias)}
                       />
                       {ale}
                     </label>
                   ))}
                 </div>
                 <div style={{ display: 'flex', gap: '0.5rem', marginTop: '0.5rem' }}>
-                  <input 
-                    type="text" 
-                    className="form-input" 
-                    placeholder="Adicionar alergia livremente..." 
-                    value={pAlergiaLivre} 
-                    onChange={(e) => setPAlergiaLivre(e.target.value)} 
+                  <input
+                    type="text"
+                    className="form-input"
+                    placeholder="Adicionar alergia livremente..."
+                    value={pAlergiaLivre}
+                    onChange={(e) => setPAlergiaLivre(e.target.value)}
                   />
-                  <button 
-                    type="button" 
-                    className="btn-secondary" 
+                  <button
+                    type="button"
+                    className="btn-secondary"
                     onClick={() => handleAddLivre(pAlergiaLivre, pAlergias, setPAlergias, setPAlergiaLivre)}
                   >
                     +
@@ -1826,25 +1826,25 @@ function App() {
 
               <div className="form-group">
                 <label className="form-label" htmlFor="form-meds">Medicamentos Contínuos</label>
-                <textarea 
+                <textarea
                   id="form-meds"
-                  className="form-input" 
-                  placeholder="Medicamentos de uso contínuo" 
-                  value={pMedicamentos} 
-                  onChange={(e) => setPMedicamentos(e.target.value)} 
-                  rows={2} 
+                  className="form-input"
+                  placeholder="Medicamentos de uso contínuo"
+                  value={pMedicamentos}
+                  onChange={(e) => setPMedicamentos(e.target.value)}
+                  rows={2}
                 />
               </div>
 
               <div className="form-group">
                 <label className="form-label" htmlFor="form-supl">Suplementos em Uso</label>
-                <textarea 
+                <textarea
                   id="form-supl"
-                  className="form-input" 
-                  placeholder="Suplementos alimentares ou vitamínicos em uso" 
-                  value={pSuplementos} 
-                  onChange={(e) => setPSuplementos(e.target.value)} 
-                  rows={2} 
+                  className="form-input"
+                  placeholder="Suplementos alimentares ou vitamínicos em uso"
+                  value={pSuplementos}
+                  onChange={(e) => setPSuplementos(e.target.value)}
+                  rows={2}
                 />
               </div>
             </div>
@@ -1856,36 +1856,36 @@ function App() {
               <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr 1fr', gap: '1rem' }}>
                 <div className="form-group">
                   <label className="form-label" htmlFor="form-refeicoes">Refeições/dia</label>
-                  <input 
+                  <input
                     id="form-refeicoes"
-                    type="number" 
-                    className="form-input" 
-                    placeholder="Ex: 5" 
-                    value={pRefeicoesDia} 
-                    onChange={(e) => setPRefeicoesDia(e.target.value)} 
+                    type="number"
+                    className="form-input"
+                    placeholder="Ex: 5"
+                    value={pRefeicoesDia}
+                    onChange={(e) => setPRefeicoesDia(e.target.value)}
                   />
                 </div>
                 <div className="form-group">
                   <label className="form-label" htmlFor="form-acorda">Horário Acorda</label>
-                  <input 
+                  <input
                     id="form-acorda"
-                    type="text" 
-                    className="form-input" 
-                    placeholder="Ex: 6 ou 630" 
-                    value={pHorarioAcorda} 
-                    onChange={(e) => setPHorarioAcorda(e.target.value)} 
+                    type="text"
+                    className="form-input"
+                    placeholder="Ex: 6 ou 630"
+                    value={pHorarioAcorda}
+                    onChange={(e) => setPHorarioAcorda(e.target.value)}
                     onBlur={(e) => handleTimeBlur(e.target.value, setPHorarioAcorda)}
                   />
                 </div>
                 <div className="form-group">
                   <label className="form-label" htmlFor="form-dorme">Horário Dorme</label>
-                  <input 
+                  <input
                     id="form-dorme"
-                    type="text" 
-                    className="form-input" 
-                    placeholder="Ex: 23 ou 2230" 
-                    value={pHorarioDorme} 
-                    onChange={(e) => setPHorarioDorme(e.target.value)} 
+                    type="text"
+                    className="form-input"
+                    placeholder="Ex: 23 ou 2230"
+                    value={pHorarioDorme}
+                    onChange={(e) => setPHorarioDorme(e.target.value)}
                     onBlur={(e) => handleTimeBlur(e.target.value, setPHorarioDorme)}
                   />
                 </div>
@@ -1893,37 +1893,37 @@ function App() {
 
               <div className="form-group">
                 <label className="form-label" htmlFor="form-agua">Consumo de Água (Litros/dia)</label>
-                <input 
+                <input
                   id="form-agua"
-                  type="number" 
-                  step="0.1" 
-                  className="form-input" 
-                  placeholder="Ex: 2.5" 
-                  value={pLitrosAgua} 
-                  onChange={(e) => setPLitrosAgua(e.target.value)} 
+                  type="number"
+                  step="0.1"
+                  className="form-input"
+                  placeholder="Ex: 2.5"
+                  value={pLitrosAgua}
+                  onChange={(e) => setPLitrosAgua(e.target.value)}
                 />
               </div>
 
               <div className="form-group">
                 <label style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', fontWeight: 600, fontSize: '0.95rem', cursor: 'pointer' }}>
-                  <input 
-                    type="checkbox" 
-                    checked={pAtividadeFisica} 
-                    onChange={() => setPAtividadeFisica(!pAtividadeFisica)} 
+                  <input
+                    type="checkbox"
+                    checked={pAtividadeFisica}
+                    onChange={() => setPAtividadeFisica(!pAtividadeFisica)}
                   />
                   Pratica atividade física?
                 </label>
-                
+
                 {pAtividadeFisica && (
                   <div style={{ marginTop: '0.75rem', animation: 'slideIn 0.2s ease-out' }}>
                     <label className="form-label" htmlFor="form-ativ-desc">Descrição e Frequência</label>
-                    <textarea 
+                    <textarea
                       id="form-ativ-desc"
-                      className="form-input" 
-                      placeholder="Qual atividade e frequência semanal? Ex: Musculação 4x/semana" 
-                      value={pAtividadeFisicaDesc} 
-                      onChange={(e) => setPAtividadeFisicaDesc(e.target.value)} 
-                      rows={2} 
+                      className="form-input"
+                      placeholder="Qual atividade e frequência semanal? Ex: Musculação 4x/semana"
+                      value={pAtividadeFisicaDesc}
+                      onChange={(e) => setPAtividadeFisicaDesc(e.target.value)}
+                      rows={2}
                     />
                   </div>
                 )}
@@ -1931,13 +1931,13 @@ function App() {
 
               <div className="form-group">
                 <label className="form-label" htmlFor="form-obs">Observações Gerais</label>
-                <textarea 
+                <textarea
                   id="form-obs"
-                  className="form-input" 
-                  placeholder="Observações complementares sobre a rotina" 
-                  value={pObservacoes} 
-                  onChange={(e) => setPObservacoes(e.target.value)} 
-                  rows={3} 
+                  className="form-input"
+                  placeholder="Observações complementares sobre a rotina"
+                  value={pObservacoes}
+                  onChange={(e) => setPObservacoes(e.target.value)}
+                  rows={3}
                 />
               </div>
             </div>
@@ -1945,16 +1945,16 @@ function App() {
 
           {/* Action Buttons */}
           <div style={{ display: 'flex', justifyContent: 'flex-end', gap: '1rem', marginTop: '2rem', borderTop: '1px solid var(--border-color)', paddingTop: '1.5rem' }}>
-            <button 
-              type="button" 
-              onClick={() => { setIsAddingPatient(false); setIsEditingPatientId(null); }} 
+            <button
+              type="button"
+              onClick={() => { setIsAddingPatient(false); setIsEditingPatientId(null); }}
               className="btn-secondary"
             >
               Cancelar
             </button>
-            <button 
-              type="submit" 
-              className="btn-primary" 
+            <button
+              type="submit"
+              className="btn-primary"
               disabled={actionLoading}
             >
               {actionLoading ? 'Salvando...' : 'Salvar Paciente'}
@@ -1968,9 +1968,9 @@ function App() {
   return (
     <>
       {/* Theme Toggle Button */}
-      <button 
-        onClick={toggleTheme} 
-        className="theme-toggle" 
+      <button
+        onClick={toggleTheme}
+        className="theme-toggle"
         aria-label="Alternar tema"
         title="Alternar tema"
       >
@@ -1988,8 +1988,8 @@ function App() {
 
             <nav className="menu-list">
               <li>
-                <button 
-                  onClick={() => { setActiveTab('dashboard'); setSelectedPatientId(null); }} 
+                <button
+                  onClick={() => { setActiveTab('dashboard'); setSelectedPatientId(null); }}
                   className={`menu-item ${activeTab === 'dashboard' && !selectedPatientId ? 'active' : ''}`}
                 >
                   <Activity size={18} />
@@ -1997,8 +1997,8 @@ function App() {
                 </button>
               </li>
               <li>
-                <button 
-                  onClick={() => { setActiveTab('pacientes'); setSelectedPatientId(null); }} 
+                <button
+                  onClick={() => { setActiveTab('pacientes'); setSelectedPatientId(null); }}
                   className={`menu-item ${activeTab === 'pacientes' && !selectedPatientId ? 'active' : ''}`}
                 >
                   <Users size={18} />
@@ -2075,8 +2075,8 @@ function App() {
                                 <h4>{patient.nome}</h4>
                                 <p>Última consulta: {formatLocalDate(patient.last_date)} ({patient.days_since} dias atrás)</p>
                               </div>
-                              <button 
-                                onClick={() => setSelectedPatientId(patient.id)} 
+                              <button
+                                onClick={() => setSelectedPatientId(patient.id)}
                                 className="patient-link"
                               >
                                 Ver Ficha
@@ -2115,7 +2115,7 @@ function App() {
                       />
                       <Users className="input-icon" size={18} style={{ left: '1rem' }} />
                     </div>
-                    <button 
+                    <button
                       onClick={() => {
                         setIsAddingPatient(true);
                         setActiveFormTab('pessoal');
@@ -2146,7 +2146,7 @@ function App() {
                         setPAtividadeFisica(false);
                         setPAtividadeFisicaDesc('');
                         setPObservacoes('');
-                      }} 
+                      }}
                       className="btn-primary"
                       style={{ display: 'flex', alignItems: 'center', gap: '0.5rem' }}
                     >
@@ -2200,8 +2200,8 @@ function App() {
                                   Última consulta: {lastConsultDate ? formatLocalDate(lastConsultDate) : 'Nenhuma consulta cadastrada'}
                                 </p>
                               </div>
-                              <button 
-                                onClick={() => setSelectedPatientId(patient.id)} 
+                              <button
+                                onClick={() => setSelectedPatientId(patient.id)}
                                 className="patient-link"
                               >
                                 Ver Ficha
@@ -2231,8 +2231,8 @@ function App() {
                 <span className="logo-text">Sperandiu Nutri</span>
               </div>
               <p className="auth-subtitle">
-                {view === 'login' 
-                  ? 'Gestão inteligente para nutricionistas' 
+                {view === 'login'
+                  ? 'Gestão inteligente para nutricionistas'
                   : 'Crie sua conta para começar a gerenciar'
                 }
               </p>
@@ -2308,10 +2308,10 @@ function App() {
                 </button>
 
                 <div className="auth-footer">
-                  Não tem conta? 
-                  <button 
-                    type="button" 
-                    className="auth-link" 
+                  Não tem conta?
+                  <button
+                    type="button"
+                    className="auth-link"
                     onClick={() => switchView('register')}
                   >
                     Cadastre-se
@@ -2390,10 +2390,10 @@ function App() {
                 </button>
 
                 <div className="auth-footer">
-                  Já tem conta? 
-                  <button 
-                    type="button" 
-                    className="auth-link" 
+                  Já tem conta?
+                  <button
+                    type="button"
+                    className="auth-link"
                     onClick={() => switchView('login')}
                   >
                     Faça login
